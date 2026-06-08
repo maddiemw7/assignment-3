@@ -5,7 +5,7 @@ import '../providers/favorites_provider.dart';
 
 class CityCard extends StatelessWidget {
   final CityModel city;
-  
+
   const CityCard({
     super.key,
     required this.city,
@@ -15,13 +15,15 @@ class CityCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 150,
-      margin: EdgeInsets.only(bottom: 8),
+      margin: const EdgeInsets.only(bottom: 8),
       child: Stack(
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(16),
             child: Image.asset(
               "assets/images/${city.cityImage}.jpeg",
+              width: double.infinity,
+              height: 150,
               fit: BoxFit.cover,
             ),
           ),
@@ -30,30 +32,35 @@ class CityCard extends StatelessWidget {
             left: 12,
             right: 12,
             child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                city.cityName,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 18,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  city.cityName,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    shadows: [
+                      Shadow(blurRadius: 4, color: Colors.black54),
+                    ],
+                  ),
                 ),
-              ),
-              IconButton(
-                onPressed: () { 
-                  context.read<FavoritesProvider>().toggleCityFavorite(city.id);
-                }, 
-                icon: Icon(
-                  city.isFavorite ? 
-                  Icons.favorite : 
-                  Icons.favorite_border,
-                color: 
-                city.isFavorite ? 
-                Colors.red : 
-                Colors.black54))
-            ],
-          ))
-
+                Consumer<FavoritesProvider>(
+                  builder: (context, provider, _) {
+                    return IconButton(
+                      onPressed: () {
+                        provider.toggleCityFavorite(city.id);
+                      },
+                      icon: Icon(
+                        city.isFavorite ? Icons.favorite : Icons.favorite_border,
+                        color: city.isFavorite ? Colors.pink : Colors.white,
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
